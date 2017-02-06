@@ -13,7 +13,7 @@ namespace ContainerReader
         {
             if(args.Length != 1)
             {
-                Console.WriteLine("ContainerReader\nA program that prints infomation about Windows Containers.index files, used to store metadata (such as the package family name, guid, and filename) about configuration/save game files for UWP apps and games.\nContainer \"filenames\" are actually directories, as they can have more than one file inside of them.\nUsage: ContainerReader containers.index");
+                Console.WriteLine("ContainerReader\nA program that prints infomation about Windows Containers.index files, used to store metadata (such as the package family name, guid, and filename) about configuration/save game files for UWP apps and games.\nContainer \"filenames\" are actually directories, as they can have more than one file inside of them.\nUsage: ContainerReader containers.index\nNOTE: Doesn't, at the current time, handle all forms of containers.index. Will add support, but most are supported.");
                 return;
             }
             try
@@ -65,6 +65,8 @@ namespace ContainerReader
                     // More unknown data... really gotta try to figure this out
                     reader.ReadBytes(0x18);
 
+                    // holy unwieldy code batman...gotta condense this sometime
+                    // TODO: condense this
                     Console.WriteLine(fileName+" | "+UnknownValue+" | "+BitConverter.ToString(guid1).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid2).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid3).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid4).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid5).Replace("-", string.Empty));
 
                 }
