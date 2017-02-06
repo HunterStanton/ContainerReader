@@ -24,8 +24,7 @@ namespace ContainerReader
                 // Create a binary reader that will be used to read the file
                 BinaryReader reader = new BinaryReader(file);
 
-                // Get the number of files in the index
-                reader.BaseStream.Position = 4;
+                int type = reader.ReadInt32();
                 // Could be something other than int32, but very unlikely
                 int numFiles = reader.ReadInt32();
 
