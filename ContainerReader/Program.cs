@@ -24,7 +24,14 @@ namespace ContainerReader
                 // Create a binary reader that will be used to read the file
                 BinaryReader reader = new BinaryReader(file);
 
+                // Grab the type, currently the only supported type is 0xD
                 int type = reader.ReadInt32();
+
+                // Throw generic exception
+                if(type != 0xd)
+                {
+                    throw new Exception();
+                }
                 // Could be something other than int32, but very unlikely
                 int numFiles = reader.ReadInt32();
 
@@ -81,6 +88,11 @@ namespace ContainerReader
             catch (UnauthorizedAccessException)
             {
                 Console.WriteLine("File could not be accessed!");
+                return;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("This type is not supported yet.");
                 return;
             }
             return;
