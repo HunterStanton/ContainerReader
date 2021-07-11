@@ -61,8 +61,7 @@ namespace ContainerReader
                 {
                     string fileName = BinaryReaderHelper.ReadUnicodeString(reader, reader.ReadInt32());
 
-                    // 4 padding bytes
-                    reader.ReadBytes(4);
+                    string secondName = BinaryReaderHelper.ReadUnicodeString(reader, reader.ReadInt32());
 
                     // Unknown value, surrounded by quotes for some reason
                     string UnknownValue = BinaryReaderHelper.ReadUnicodeString(reader, reader.ReadInt32());
