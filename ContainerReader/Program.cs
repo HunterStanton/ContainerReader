@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,10 +28,11 @@ namespace ContainerReader
                 int type = reader.ReadInt32();
 
                 // Throw generic exception
-                if(type != 0xd)
+                if(type != 0xd && type != 0xe)
                 {
                     throw new Exception();
                 }
+
                 // Could be something other than int32, but very unlikely
                 int numFiles = reader.ReadInt32();
 
@@ -44,6 +45,12 @@ namespace ContainerReader
                 // Not sure what this is either, but I'll print it
                 Console.WriteLine("Unknown GUID: " + BinaryReaderHelper.ReadUnicodeString(reader, reader.ReadInt32()));
 
+                if (type == 0xe)
+                {
+                    // 8 padding bytes
+                    reader.ReadBytes(8);
+                }
+
                 // Loop through every file in the index, and print info about it
                 for (int i = 0; i < numFiles;i++)
                 {
@@ -55,8 +62,10 @@ namespace ContainerReader
                     // Unknown value, surrounded by quotes for some reason
                     string UnknownValue = BinaryReaderHelper.ReadUnicodeString(reader, reader.ReadInt32());
 
+                    byte containerNum = reader.ReadByte();
+
                     // Unknown, will add later if it is important
-                    reader.ReadBytes(5);
+                    reader.ReadBytes(4);
 
                     // The guid folder that the files reside in
                     byte[] guid1 = reader.ReadBytes(4);
@@ -73,7 +82,7 @@ namespace ContainerReader
 
                     // holy unwieldy code batman...gotta condense this sometime
                     // TODO: condense this
-                    Console.WriteLine(fileName+" | "+UnknownValue+" | "+BitConverter.ToString(guid1).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid2).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid3).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid4).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid5).Replace("-", string.Empty));
+                    Console.WriteLine(fileName+" | "+UnknownValue+" | "+containerNum+" | "+BitConverter.ToString(guid1).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid2).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid3).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid4).Replace("-", string.Empty) + "-"+ BitConverter.ToString(guid5).Replace("-", string.Empty));
 
                 }
                 return;
