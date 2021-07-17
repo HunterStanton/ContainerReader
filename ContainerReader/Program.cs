@@ -11,7 +11,7 @@ namespace ContainerReader
     {
         static void Main(string[] args)
         {
-            if(args.Length != 1)
+            if (args.Length != 1)
             {
                 Console.WriteLine("ContainerReader\nA program that prints infomation about Windows Containers.index files, used to store metadata (such as the package family name, guid, and filename) about configuration/save game files for UWP apps and games.\nContainer \"filenames\" are actually directories, as they can have more than one file inside of them.\nUsage: ContainerReader containers.index\nNOTE: Doesn't, at the current time, handle all forms of containers.index. Will add support, but most are supported.");
                 return;
@@ -116,13 +116,8 @@ namespace ContainerReader
 
                             for (int y = 0; y < subNumFiles; y++)
                             {
-                                string subfileName = BinaryReaderHelper.ReadUnicodeString(subReader);
-
-                                // Ignore all the white space of the block
-                                while (subReader.ReadByte() == 0x0) { }
-
-                                // Go back to a position after reading a non-empty byte
-                                subReader.BaseStream.Position--;
+                                // subFileName has a fixed length
+                                string subfileName = BinaryReaderHelper.ReadUnicodeString(subReader, 0x40);
 
                                 // The sub guid folder that the files reside in
                                 byte[] subGuid1 = subReader.ReadBytes(4);
